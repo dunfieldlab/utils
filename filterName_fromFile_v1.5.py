@@ -6,14 +6,15 @@ __author__ = "Andriy Sheremet"
 import getopt
 import sys
 from Bio import  SeqIO
+from Bio.SeqUtils import GC
 import operator
 
 pars ={}
 
 pars["infile"] = ""
 pars["outfile"] = ""
-pars["length"] = 100
-pars["test"] = ">="
+pars["Name"] = ""
+pars["test"] = "="
 
 def usage():
     print "\nThis is the usage function:\n"
@@ -65,7 +66,7 @@ def main(argv):
             #print "Output file", arg  
         elif opt in ("-l", "--length"):
             try:
-                pars["length"] = int(arg)
+                pars["Name"] = arg
             except:
                 print "ERROR: Please enter an integer value as -l parameter (using default 100)"
                 usage()
@@ -81,6 +82,16 @@ def filter_fasta(params):
             handle = open(params["infile"], "rU")
         except:
             print "\nERROR: Input file doesn't exist"
+            usage()
+            sys.exit(1)
+    if params["Name"]:
+        try:
+            #
+            with open(params["Name"], "rU") as outfile:
+                names=[n.strip() for n in outfile]
+                #print names
+        except:
+            print "\nERROR: Name file doesn't exist"
             usage()
             sys.exit(1)
     else:
@@ -107,7 +118,9 @@ def filter_fasta(params):
         'lessEq' : operator.le,
         '!=' : operator.ne,
         'notEq' : operator.ne,
-        'not' : operator.ne
+        'not' : operator.ne,
+		'r':'rg',
+		'range':'rg'
         } 
     if params["test"] not in operations:
         print "ERROR: unsuported comparison test: ", params["test"]
@@ -121,7 +134,7 @@ def filter_fasta(params):
         print "Output file: ", params["outfile"]
     else:
         print "Output file: ", "terminal window"
-    print "Limit: ", params["length"]
+    print "Limit: ", params["Name"]
     print "\n"
 
     
@@ -134,10 +147,20 @@ def filter_fasta(params):
     processed = 0
     for record in parsed:
         total += 1
-        #print(record.id), len(record.seq)
-        if operations[params["test"]](len(record.seq), params["length"]):
-            processed += 1
+        if record.name in names:
+            processed +=1
             records.append(record)
+        #print(record.id), len(record.seq)
+        #print record.description
+#        if (operations[params["test"]] == operator.eq):
+#            if ((operations[params["test"]](record.name, params["Name"]) or operations[params["test"]](record.description, params["Name"]))):
+#
+#                processed += 1
+#                records.append(record)
+#        if (operations[params["test"]] == operator.ne):
+#            if ((operations[params["test"]](record.name, params["Name"]) and operations[params["test"]](record.description, params["Name"]))):
+#                processed += 1
+#                records.append(record)
     handle.close()   
     
     if total== 1:
