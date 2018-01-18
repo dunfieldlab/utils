@@ -1,0 +1,2 @@
+#Copy BaseSpace files cleanly
+ls */Files/* | awk -F "/" '{print "cp " $0" " $1"/"$NF }' | bash
