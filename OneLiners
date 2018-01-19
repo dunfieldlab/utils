@@ -1,0 +1,6 @@
+#Copy BaseSpace files cleanly
+ls */Files/* | awk -F "/" '{print "cp " $0" " $1"/"$NF }' | bash
+#clean extra files/folder
+rm -rf */{Files,Files.metadata,Properties}
+rm */{ParentAppSession,ParentProject,SampleProperties}
+rm */.??*
