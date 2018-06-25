@@ -1,3 +1,5 @@
+#get inside the target directory
+rsynk -avz /home/dunfield/Desktop/BaseSpace/Projects/Dunfield_LANE16/Samples/ .
 #Copy BaseSpace files cleanly
 ls */Files/* | awk -F "/" '{print "cp " $0" " $1"/"$NF }' | bash
 #clean extra files/folder
