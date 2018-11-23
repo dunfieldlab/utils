@@ -1,8 +1,16 @@
 #get inside the target directory
-rsynk -avz /home/dunfield/Desktop/BaseSpace/Projects/Dunfield_LANE16/Samples/ .
+rsync -avz /home/dunfield/Desktop/BaseSpace/Projects/Dunfield_LANE16/Samples/ .
+
 #Copy BaseSpace files cleanly
 ls */Files/* | awk -F "/" '{print "cp " $0" " $1"/"$NF }' | bash
 #clean extra files/folder
 rm -rf */{Files,Files.metadata,Properties}
 rm */{ParentAppSession,ParentProject,SampleProperties}
 rm */.??*
+
+#the smarter way could be in copying the specific filetypes only
+## we are in the directory of interest
+rsync -zarv --prune-empty-dirs  --include "*/"  --include="*.fastq.gz" --exclude="*"  ~/Desktop/BaseSpace/Projects/Dunfield_LANE17/Samples/ .
+#it indeed works only needs putting the files one level up
+ls */Files/* | awk -F "/" '{print "cp " $0" " $1"/"$NF }' | bash
+rm -rf */Files
