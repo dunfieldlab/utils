@@ -14,5 +14,5 @@ rm */.??*
 ## we are in the directory of interest
 rsync -zarv --prune-empty-dirs  --include "*/"  --include="*.fastq.gz" --exclude="*"  ~/Desktop/BaseSpace/Projects/Dunfield_LANE17/Samples/ .
 #it indeed works only needs putting the files one level up
-ls */Files/* | awk -F "/" '{print "cp " $0" " $1"/"$NF }' | bash
-rm -rf */Files
+ls */Files/* | awk -F "/" '{print "cp " $0" " $1"/"$NF }' | bash; rm -rf */Files
+
