@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#! /bin/sh -
+''''exec python "$0" "$@" # '''
 
 __author__ = "Andriy Sheremet"
 
