@@ -3,16 +3,21 @@
 
 #capturing the basename and initial housekeeping
 bn=`echo "$1" | cut -d'.' -f1`
-echo $# arguments
 
-
-#mapping reads in 8 threads
+#creating index
+cmd_str=bowtie2-build" "$1" "$bn
+echo $cmd_str
+eval $cmd_str
+#index created
 
 # detecting if reads are R1/R2 or interleaved
+#mapping reads in 8 threads
 if [ $# -eq 2 ]; then
     cmd_str="bowtie2 -x "$bn" --interleaved "$2" -S "$bn".sam -p 8"
+
 elif [ $# -eq 3 ]; then
     cmd_str="bowtie2 -x "$bn" -1 "$2" -2 "$3" -S "$bn".sam -p 8"
+
 else
      echo 'Unexpected number of arguments. Exiting...'
      echo 'Usage: PROGRAM <assembled> <R1> <R2>'
@@ -21,12 +26,8 @@ else
      exit 1
 fi
 
-#creating index
-cmd_str=bowtie2-build" "$1" "$bn
-echo $cmd_str
-eval $cmd_str
-#index created
 
+#executing cli-sensitive bowtie2 command
 echo $cmd_str
 eval $cmd_str
 
