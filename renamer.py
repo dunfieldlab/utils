@@ -8,6 +8,7 @@ import glob
 import re
 import shutil
 import os
+from argparse import RawTextHelpFormatter
 
 class Renamer:
     def __init__(self):
@@ -22,9 +23,11 @@ class Renamer:
         self.modified = 0
 
     def parse_args(self, argv=None):
-        parser = argparse.ArgumentParser()
+        parser = argparse.ArgumentParser(formatter_class=RawTextHelpFormatter, description="""Renamer - a tool for copying and renaming of multiple files
+    USAGE EXAMPLE: 
+        python renamer.py -c \"_L001\" -p \"L11_\" - will add L11 prefix and cut _L001 from each fastq.gz file in a folder""")
         parser.add_argument("mask", default="*.fastq.gz", nargs="?",
-                            help="The mask to select files. Default *.fastq.gz: all fastq files in a current folder. Use \"*mask*\" to select all flies of interest")
+                            help="The mask to select files. Default \"*.fastq.gz\": all fastq files in a current folder. Use \"*mask*\" to select all flies of interest")
         parser.add_argument("--dry-run", action="store_true", help="Display renaming logs, keep the files intact")
         parser.add_argument("--prefix", "-p", help="Add the supplied prefix to the beginning of each file")
         parser.add_argument("--cut", "-c", help="Cut the specified string from a filename")
